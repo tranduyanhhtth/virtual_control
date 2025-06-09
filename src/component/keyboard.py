@@ -10,7 +10,6 @@ COLOR_HIGHLIGHTED = (100, 200, 255) # Xanh dương sáng (khi trỏ vào)
 COLOR_SELECTED = (0, 180, 150)      # Xanh ngọc (khi chọn)
 COLOR_TEXT = (255, 255, 255)        # Trắng (màu chữ)
 COLOR_TEXTBOX = (80, 120, 160)      # Xanh xám nhạt (hộp văn bản)
-
     
 class Button:
     def __init__(self, pos, text, size):

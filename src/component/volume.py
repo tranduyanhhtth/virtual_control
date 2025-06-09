@@ -1,48 +1,22 @@
 import cv2
 import numpy as np
 from component.hand import HandDetector
-import platform
 import subprocess
-import os
 
-# Windows-specific imports
-try:
-    from comtypes import CLSCTX_ALL
-    from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
-except ImportError:
-    pass
-
-# Quy định màu lạnh
-COLOR_DEFAULT = (50, 150, 200)
-COLOR_HIGHLIGHTED = (100, 200, 255)
-COLOR_SELECTED = (0, 180, 150)
-COLOR_TEXT = (255, 255, 255)
+COLOR_DEFAULT = (50, 150, 200)      # Xanh dương nhạt (mặc định)
+COLOR_HIGHLIGHTED = (100, 200, 255) # Xanh dương sáng (khi trỏ vào)
+COLOR_SELECTED = (0, 180, 150)      # Xanh ngọc (khi chọn)
+COLOR_TEXT = (255, 255, 255)        # Trắng (màu chữ)
 
 class VirtualVolume:
     def __init__(self, detector, pos=[640, 360], size=[300, 50]):
         self.detector = detector
         self.pos = pos
         self.size = size
-        self.volume = 50  # Giá trị ban đầu
-        self.system = platform.system()
-
-        # Khởi tạo điều khiển âm lượng theo hệ điều hành
-        if self.system == "Windows":
-            devices = AudioUtilities.GetSpeakers()
-            interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-            self.volume_control = interface.QueryInterface(IAudioEndpointVolume)
-            self.vol_range = self.volume_control.GetVolumeRange()
-        elif self.system not in ["Linux", "Darwin"]:
-            raise Exception("Hệ điều hành không được hỗ trợ cho điều khiển âm lượng")
+        self.volume = 50  # Giá trị âm lượng ban đầu
 
     def set_volume(self, volume):
-        if self.system == "Windows":
-            vol_system = np.interp(volume, [0, 100], [self.vol_range[0], self.vol_range[1]])
-            self.volume_control.SetMasterVolumeLevel(vol_system, None)
-        elif self.system == "Linux":
-            subprocess.run(["amixer", "-q", "set", "Master", f"{int(volume)}%"])
-        elif self.system == "Darwin":  # macOS
-            subprocess.run(["osascript", "-e", f"set volume output volume {int(volume)}"])
+        subprocess.run(["amixer", "-q", "set", "Master", f"{int(volume)}%"])
 
     def process(self, img, lmList):
         if lmList and len(lmList[0]) > 8:

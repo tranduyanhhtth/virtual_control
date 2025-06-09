@@ -5,6 +5,7 @@ from component.mouse import VirtualMouse
 from component.volume import VirtualVolume
 from component.brightness import VirtualBrightness
 from component.multhread import mulDevice
+from component.detectnumber import DetectNumber
 
 def main():
     cv2.setUseOptimized(True)
@@ -25,6 +26,7 @@ def main():
     mouse = VirtualMouse(detector)
     volume = VirtualVolume(detector)
     brightness = VirtualBrightness(detector)
+    detect_number = DetectNumber()
 
     show_menu = True
 
@@ -61,6 +63,8 @@ def main():
             elif menu.selected_option == "Brightness":
                 img = brightness.process(img, lmList)
                 img = brightness.draw(img)
+            elif menu.selected_option == "Pr_Number":
+                img = detect_number.process(img)
 
         cv2.imshow("Image", img)
         if cv2.waitKey(1) & 0xFF == ord('q'):

@@ -16,7 +16,7 @@ class mulDevice:
         self.frame_width = frame_width
         self.frame_height = frame_height
         self.button_size = button_size
-        self.options = ["Mouse", "Keyboard", "Volume", "Brightness"]
+        self.options = ["Mouse", "Keyboard", "Volume", "Brightness", "Pr_Number"]
         self.selected_option = None
         self.buttonList = self._create_buttons()
         self.isDragging = False
@@ -44,6 +44,10 @@ class mulDevice:
         # Nút Brightness
         brightness_y = volume_y + self.button_size[1] + gap
         buttonList.append(Button([start_x, brightness_y], "Brightness", self.button_size))
+
+        # Nút Predict Number
+        predict_y = brightness_y + self.button_size[1] + gap
+        buttonList.append(Button([start_x, predict_y], "Pr_Number", self.button_size))
 
         return buttonList
 
